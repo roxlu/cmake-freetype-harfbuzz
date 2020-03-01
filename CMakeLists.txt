@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.15)
 project(freetype-with-harfbuzz)
 include(ExternalProject)
 
-# dumpbin /headers freetype.lib | findstr /i "metrics"
-
 # Set the name of the "byproduct" which is necessary when using
 # the Ninja generator and External Project dependencies.
 # -------------------------------------------------------
