@@ -19,6 +19,6 @@ if [ $? -ne 0 ] ; then
     exit
 fi
 
-# ninja
-cmake --build . --target install
+ninja
+
 
