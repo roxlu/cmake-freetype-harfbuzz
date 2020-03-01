@@ -1,0 +1,44 @@
+﻿diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b0f86126b..81bb125d7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -160,17 +160,36 @@ set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+ set(SHARED_LIBRARY_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
+ 
+ 
++# Find harfbuzz
++# -------------------------------------------
++find_library(hb_lib harfbuzz) 
++if (NOT hb_lib MATCHES NOTFOUND)
++  set(HARFBUZZ_LIBRARIES ${hb_lib})
++endif()
++  
++find_path(hb_path harfbuzz)
++if (NOT hb_path MATCHES NOTFOUND)
++  set(HARFBUZZ_INCLUDE_DIRS ${hb_path}/harfbuzz)
++endif()
++
++if (NOT hb_path MATCHES NOTFOUND AND NOT hb_lib MATCHES NOTFOUND)
++  set(HARFBUZZ_FOUND TRUE)
++  message(STATUS "Building with Harfbuzz")
++  message(STATUS "   library: ${HARFBUZZ_LIBRARIES}")
++  message(STATUS "   include dir: ${HARFBUZZ_INCLUDE_DIRS}")
++endif()
++# -------------------------------------------
++
+ # Compiler definitions for building the library
+ add_definitions(-DFT2_BUILD_LIBRARY)
+ 
+-
+ # Find dependencies
+-foreach (d ZLIB BZip2 PNG HarfBuzz)
++foreach (d ZLIB BZip2 PNG)
+   string(TOUPPER "${d}" D)
+ 
+   if (DEFINED WITH_${d} OR DEFINED WITH_${D})
+     if (WITH_${d} OR WITH_${D})
+-      find_package(${d} QUIET REQUIRED)
++      find_package(${d} REQUIRED)
+     endif ()
+   else ()
+     find_package(${d} QUIET)
